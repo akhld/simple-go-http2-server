@@ -1,11 +1,20 @@
 package main
 
-import "net/http"
+import (
+	"net/http"
+	"golang.org/x/net/http2"
+)
 
 func main() {
 
+	var srv http.Server
+	srv.Addr = ":8080"
+	//Enable http2
+	http2.ConfigureServer(&srv, nil)
+
 	http.HandleFunc("/", index_main)
-	http.ListenAndServe(":8080", nil)
+
+	srv.ListenAndServeTLS("certs/localhost.cert", "certs/localhost.key")
 	
 }
 
